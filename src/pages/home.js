@@ -117,6 +117,8 @@ const Home = () => {
 		background-color: #fff;
 		border: none;
 	`;
+	// 단축키
+
 	// 검색 입력 이벤트
 	const searchHandler = (e) => {
 		if (timer) {
@@ -206,6 +208,25 @@ const Home = () => {
 		}
 	}, [content, loading]);
 
+	const [ctrl, setCtrl] = useState(false);
+
+	useEffect(() => {
+		// CTRL + R, F5
+		window.addEventListener('keydown', (e) => {
+			e.keyCode === 17 && setCtrl(true);
+			if ((e.keyCode === 82 && ctrl) || e.keyCode === 116) {
+				e.returnValue = false;
+				return false;
+			} else if (e.keyCode === 93 && ctrl) {
+				e.returnValue = false;
+				return ipcRenderer.send('open_devTools');
+			}
+		});
+		window.addEventListener('keyup', (e) => {
+			e.keyCode === 17 && setCtrl(false);
+		});
+		return () => {};
+	}, [ctrl]);
 	return (
 		<StyledSpin size='large' tip={<StyledAlert message='업데이트 확인 중...' description={content} type='info' />} spinning={loading} indicator={antIcon}>
 			<Layout className='layout'>

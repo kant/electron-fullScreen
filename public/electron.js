@@ -36,18 +36,6 @@ if (!gotTheLock) {
 	app.whenReady().then(() => {
 		createWindow();
 		autoUpdater.checkForUpdatesAndNotify();
-		// 단축어 해제
-		globalShortcut.unregisterAll();
-		// 단축어 설정
-		globalShortcut.register('CommandOrControl+R', () => {
-			return false;
-		});
-		globalShortcut.register('CommandOrControl+A', () => {
-			return false;
-		});
-		globalShortcut.register('CommandOrControl+Shift+PrintScreen', () => {
-			win.webContents.openDevTools();
-		});
 
 		app.on('activate', function () {
 			if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -86,6 +74,11 @@ if (!gotTheLock) {
 	ipcMain.on('app_version', () => {
 		log.info('app_version : ', app.getVersion());
 		win.webContents.send('app_version', { version: app.getVersion() });
+	});
+	// 개발자 도구
+	ipcMain.on('open_devTools', async () => {
+		await win.webContents.openDevTools();
+		log.info('open DevTools');
 	});
 }
 
