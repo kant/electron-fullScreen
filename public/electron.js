@@ -171,10 +171,8 @@ const newWindow = (url) => {
 	});
 	outsideLink.setMenuBarVisibility(false);
 	outsideLink.loadURL(url);
+	outsideLink.focus();
 
-	outsideLink.once('ready-to-show', () => {
-		outsideLink.focus();
-	});
 	outsideLink.webContents.on('new-window', (event, url) => {
 		event.preventDefault();
 		newWindow(url);

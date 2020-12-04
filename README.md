@@ -30,9 +30,10 @@ Window, Mac 환경은 다르기에 각각 OS에서 Build 해야한다.
 
 ---
 
-### `Now Version : 1.0.2`
+### `Now Version : 1.0.3`
 
 # Patch Note
+1.0.3 : DevTools 중복 실행 수정<br/>
 
 1.0.2 : 단축어 기능 변경<br/>
 

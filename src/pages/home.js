@@ -15,6 +15,24 @@ if (localStorage.getItem('engine') === null) {
 }
 let settingEngine = window.localStorage.getItem('engine') === 'true' ? true : false;
 
+// CTRL + R, F5
+let ctrl = false;
+window.addEventListener('keydown', (e) => {
+	if (e.keyCode === 17) ctrl = true;
+	if ((e.keyCode === 82 && ctrl) || e.keyCode === 116) {
+		e.returnValue = false;
+		return false;
+	} else if (e.keyCode === 93 && ctrl) {
+		e.returnValue = false;
+		return ipcRenderer.send('open_DevTools');
+	} else if (e.keyCode === 81 && ctrl) {
+		e.returnValue = false;
+		return ipcRenderer.send('app_quit');
+	}
+});
+window.addEventListener('keyup', (e) => {
+	if (e.keyCode === 17) ctrl = false;
+});
 const Home = () => {
 	const [value, setValue] = useState(''); // 검색
 	const [engine, setEngine] = useState('Google'); // 검색 엔진
@@ -23,7 +41,6 @@ const Home = () => {
 	const [loading, setLoading] = useState(true); // 로딩
 	const [version, setVerion] = useState(''); // 프로그램 버전
 	const [content, setContent] = useState(''); // 업데이트 상태
-
 	const textRef = useRef();
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------
 	let timer;
@@ -101,6 +118,8 @@ const Home = () => {
 	const StyledLabel = styled.label`
 		color: ${engineColor};
 		font-weight: 600;
+		user-select: none;
+		-webkit-app-region: no-drag;
 	`;
 	const StyledSpin = styled(Spin)`
 		max-height: 100% !important;
@@ -208,27 +227,6 @@ const Home = () => {
 		}
 	}, [content, loading]);
 
-	const [ctrl, setCtrl] = useState(false);
-
-	useEffect(() => {
-		// CTRL + R, F5
-		window.addEventListener('keydown', (e) => {
-			e.keyCode === 17 && setCtrl(true);
-			if ((e.keyCode === 82 && ctrl) || e.keyCode === 116) {
-				e.returnValue = false;
-				return false;
-			} else if (e.keyCode === 93 && ctrl) {
-				e.returnValue = false;
-				return ipcRenderer.send('open_DevTools');
-			} else if (e.keyCode === 81 && ctrl) {
-				e.returnValue = false;
-				return ipcRenderer.send('app_quit');
-			}
-		});
-		window.addEventListener('keyup', (e) => {
-			e.keyCode === 17 && setCtrl(false);
-		});
-	}, [ctrl]);
 	return (
 		<StyledSpin size='large' tip={<StyledAlert message='업데이트 확인 중...' description={content} type='info' />} spinning={loading} indicator={antIcon}>
 			<Layout className='layout'>
