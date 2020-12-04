@@ -175,15 +175,15 @@ const Home = () => {
 	}, [engineType]);
 	// 업데이트 상태 변경
 	useEffect(() => {
+		if (window.performance.navigation.type === 1) {
+			setLoading(false);
+		}
 		if (isElectron()) {
 			ipcRenderer.on('message', function (event, status) {
 				switch (status) {
 					case 'dev':
 					case 'update-not-available':
 						setLoading(false);
-						break;
-					case 'checking-for-update':
-						setContent('업데이트 확인 중...');
 						break;
 					case 'update_availabl':
 						setContent('업데이트 파일을 다운로드 중입니다...');
@@ -207,7 +207,7 @@ const Home = () => {
 	}, [content, loading]);
 
 	return (
-		<StyledSpin size='large' tip={<StyledAlert message='잠시만 기다려주세요...' description={content} type='info' />} spinning={loading} indicator={antIcon}>
+		<StyledSpin size='large' tip={<StyledAlert message='업데이트 확인 중...' description={content} type='info' />} spinning={loading} indicator={antIcon}>
 			<Layout className='layout'>
 				<Content style={{ height: '100%', margin: '24px 16px', padding: 24 }}>
 					<StyleButton style={{ width: '100%' }}>

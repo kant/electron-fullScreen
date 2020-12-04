@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, Tray, Menu, ipcMain, dialog, globalShortcut } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
 const log = require('electron-log');
@@ -36,6 +36,22 @@ if (!gotTheLock) {
 	app.whenReady().then(() => {
 		createWindow();
 		autoUpdater.checkForUpdatesAndNotify();
+		// 단축어 해제
+		globalShortcut.unregisterAll();
+		// 단축어 설정
+		globalShortcut.register('CommandOrControl+R', (event) => {
+			event.preventDefault();
+			return false;
+		});
+		globalShortcut.register('CommandOrControl+A', (event) => {
+			event.preventDefault();
+			return false;
+		});
+		globalShortcut.register('CommandOrControl+Shift+PrintScreen', (event) => {
+			event.preventDefault();
+			win.webContents.openDevTools();
+		});
+
 		app.on('activate', function () {
 			if (BrowserWindow.getAllWindows().length === 0) createWindow();
 		});
@@ -47,35 +63,25 @@ if (!gotTheLock) {
 			app.exit();
 		}
 	});
-	// 업데이트 확인 중
-	autoUpdater.on('checking-for-update', () => {
-		log.info('checking-for-update');
-		sendStatusToReact('checking-for-update');
-	});
 	// 업데이트가 필요 할 시
 	autoUpdater.on('update-available', () => {
-		log.info('update_availabl');
 		sendStatusToReact('update_available');
 	});
 	// 업데이트가 필요 없을 시
 	autoUpdater.on('update-not-available', (info) => {
-		log.info('update-not-available');
 		sendStatusToReact('update-not-available');
 	});
 	// 업데이트 파일 다운로드
 	autoUpdater.on('update-downloaded', (info) => {
-		log.info('update-downloaded');
 		sendStatusToReact('update-downloaded');
 		// 서비스 재시작
 		setTimeout(() => {
 			autoUpdater.quitAndInstall();
-			log.info('quitAndInstall');
 		}, 8000);
 	});
 	// 업데이트 파일 다운로드 중 오류
 	autoUpdater.on('error', (err) => {
 		dialog.showErrorBox('Error', '자동 업데이트를 실패하였습니다.', () => {
-			log.error('App ending...');
 			app.quit();
 		});
 	});
@@ -86,7 +92,7 @@ if (!gotTheLock) {
 	});
 }
 
-const createWindow = async () => {
+const createWindow = () => {
 	win = new BrowserWindow({
 		minWidth: 800,
 		height: 600,
@@ -120,13 +126,14 @@ const createWindow = async () => {
 		event.preventDefault();
 		win.hide();
 	});
+	win.on('hide', () => {
+		win.webContents.closeDevTools();
+	});
+
 	win.webContents.on('new-window', (event, url) => {
 		event.preventDefault();
 		win.hide();
 		newWindow(url);
-	});
-	win.webContents.on('devtools-opened', () => {
-		// win.webContents.closeDevTools();
 	});
 };
 
