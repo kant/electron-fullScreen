@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, Tray, Menu, ipcMain, dialog, remote } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
 const log = require('electron-log');
@@ -76,9 +76,19 @@ if (!gotTheLock) {
 		win.webContents.send('app_version', { version: app.getVersion() });
 	});
 	// 개발자 도구
-	ipcMain.on('open_devTools', async () => {
-		await win.webContents.openDevTools();
-		log.info('open DevTools');
+	ipcMain.on('open_DevTools', async () => {
+		log.info('open_DevTools');
+		log.info('remote');
+		remote.getCurrentWindow().toggleDevTools();
+
+		log.info('brower');
+		let devtools = new BrowserWindow();
+		win.webContents.setDevToolsWebContents(devtools.webContents);
+		win.webContents.openDevTools({ mode: 'detach' });
+	});
+	ipcMain.on('app_quit', async () => {
+		log.info('App Ending...');
+		app.quit();
 	});
 }
 

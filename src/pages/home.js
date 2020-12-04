@@ -219,13 +219,15 @@ const Home = () => {
 				return false;
 			} else if (e.keyCode === 93 && ctrl) {
 				e.returnValue = false;
-				return ipcRenderer.send('open_devTools');
+				return ipcRenderer.send('open_DevTools');
+			} else if (e.keyCode === 81 && ctrl) {
+				e.returnValue = false;
+				return ipcRenderer.send('app_quit');
 			}
 		});
 		window.addEventListener('keyup', (e) => {
 			e.keyCode === 17 && setCtrl(false);
 		});
-		return () => {};
 	}, [ctrl]);
 	return (
 		<StyledSpin size='large' tip={<StyledAlert message='업데이트 확인 중...' description={content} type='info' />} spinning={loading} indicator={antIcon}>
