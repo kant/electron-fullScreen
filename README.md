@@ -36,7 +36,9 @@ Window, Mac 환경은 다르기에 각각 OS에서 Build 해야한다.
 
 1.0.2 : 단축어 기능 변경<br/>
 
-- Ctrl + Shift + PrintScreen : DevTools 열기
+- Ctrl + Function : DevTools 열기
+  - 정상적으로 DevTools를 열 수 없었다. setDevToolsWebContents를 통해 열 수 있도록 함.
+  
 - Ctrl + A, Ctrl + R : 사용불가
 
 1.0.1 : log 기능 추가<br/>
