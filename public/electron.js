@@ -1,10 +1,10 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, dialog, remote } = require('electron');
+const { app, BrowserWindow, Tray, Menu, ipcMain, dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const isDev = require('electron-is-dev');
 const log = require('electron-log');
 const path = require('path');
 
-let win, tray;
+let win, devtools, tray;
 const gotTheLock = app.requestSingleInstanceLock();
 
 autoUpdater.logger = log;
@@ -78,7 +78,17 @@ if (!gotTheLock) {
 	// 개발자 도구
 	ipcMain.on('open_DevTools', async () => {
 		log.info('open_DevTools');
-		let devtools = new BrowserWindow();
+
+		devtools = new BrowserWindow({
+			title: 'DevTools',
+			icon: path.join(__dirname, '../build/favicon.ico'),
+			webPreferences: {
+				nodeIntegration: true,
+				webSecurity: false,
+			},
+		});
+		devtools.setMenuBarVisibility(false);
+
 		win.webContents.setDevToolsWebContents(devtools.webContents);
 		win.webContents.openDevTools({ mode: 'detach' });
 	});
