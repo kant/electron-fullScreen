@@ -39,16 +39,13 @@ if (!gotTheLock) {
 		// 단축어 해제
 		globalShortcut.unregisterAll();
 		// 단축어 설정
-		globalShortcut.register('CommandOrControl+R', (event) => {
-			event.preventDefault();
+		globalShortcut.register('CommandOrControl+R', () => {
 			return false;
 		});
-		globalShortcut.register('CommandOrControl+A', (event) => {
-			event.preventDefault();
+		globalShortcut.register('CommandOrControl+A', () => {
 			return false;
 		});
-		globalShortcut.register('CommandOrControl+Shift+PrintScreen', (event) => {
-			event.preventDefault();
+		globalShortcut.register('CommandOrControl+Shift+PrintScreen', () => {
 			win.webContents.openDevTools();
 		});
 
