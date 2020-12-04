@@ -30,16 +30,20 @@ Window, Mac 환경은 다르기에 각각 OS에서 Build 해야한다.
 
 ---
 
-### `Now Version : 1.0.3`
+### `Now Version : 1.0.4`
 
 # Patch Note
+1.0.4 : 동영상 재생기능 수정<br/>
+
+- contextIsolation 문제로 인해 동영상 재상불가 문제 수정
+
 1.0.3 : DevTools 중복 실행 수정<br/>
 
 1.0.2 : 단축어 기능 변경<br/>
 
 - Ctrl + Function : DevTools 열기
   - 정상적으로 DevTools를 열 수 없었다. setDevToolsWebContents를 통해 열 수 있도록 함.
-  
+
 - Ctrl + A, Ctrl + R : 사용불가
 
 1.0.1 : log 기능 추가<br/>

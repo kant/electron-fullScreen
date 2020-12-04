@@ -109,6 +109,7 @@ const createWindow = () => {
 		webPreferences: {
 			nodeIntegration: true,
 			webSecurity: false,
+			contextIsolation: true,
 			preload: path.join(__dirname, './preload.js'),
 		},
 	});
@@ -173,21 +174,26 @@ const newWindow = (url) => {
 		width: 1280,
 		height: 720,
 		center: true,
+		show: false,
 		icon: path.join(__dirname, '../build/favicon.ico'),
 		webPreferences: {
 			nodeIntegration: true,
-			webSecurity: false,
+			contextIsolation: true,
 		},
 	});
 	outsideLink.setMenuBarVisibility(false);
 	outsideLink.loadURL(url);
-	outsideLink.focus();
+
+	outsideLink.on('ready-to-show', () => {
+		outsideLink.show();
+		outsideLink.focus();
+	});
 
 	outsideLink.webContents.on('new-window', (event, url) => {
 		event.preventDefault();
 		newWindow(url);
 	});
 	outsideLink.webContents.on('devtools-opened', () => {
-		outsideLink.webContents.closeDevTools();
+		// outsideLink.webContents.closeDevTools();
 	});
 };
