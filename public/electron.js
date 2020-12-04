@@ -178,7 +178,7 @@ const newWindow = (url) => {
 		icon: path.join(__dirname, '../build/favicon.ico'),
 		webPreferences: {
 			nodeIntegration: true,
-			contextIsolation: false,
+			contextIsolation: true,
 		},
 	});
 	outsideLink.setMenuBarVisibility(false);
