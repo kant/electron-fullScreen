@@ -78,10 +78,6 @@ if (!gotTheLock) {
 	// 개발자 도구
 	ipcMain.on('open_DevTools', async () => {
 		log.info('open_DevTools');
-		log.info('remote');
-		remote.getCurrentWindow().toggleDevTools();
-
-		log.info('brower');
 		let devtools = new BrowserWindow();
 		win.webContents.setDevToolsWebContents(devtools.webContents);
 		win.webContents.openDevTools({ mode: 'detach' });
@@ -89,6 +85,7 @@ if (!gotTheLock) {
 	ipcMain.on('app_quit', async () => {
 		log.info('App Ending...');
 		app.quit();
+		app.exit();
 	});
 }
 
