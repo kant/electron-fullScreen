@@ -24,7 +24,7 @@ PC에 특정 프로그램으로 인해 브라우저의 전체화면 제약이 �
 
 ---
 
-### `Now Version : 0.0.1`
+### `Now Version : 1.0.1`
 
 # Patch Note
 
